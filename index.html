@@ -3,20 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart EV Store</title>
+<title>Smart EV Cars Store</title>
 
 <style>
-body{margin:0;background:#0b0f1a;color:white;font-family:Arial;}
-
-nav{
-padding:15px;
-background:#020617;
-display:flex;
-justify-content:space-between;
+body{
+margin:0;
+font-family:Arial;
+background:#0b0f1a;
+color:white;
 }
 
+/* NAV */
+nav{
+display:flex;
+justify-content:space-between;
+padding:15px 25px;
+background:#020617;
+}
+
+/* HERO */
 .hero{
-height:50vh;
+height:55vh;
 background:url("https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg") center/cover;
 display:flex;
 align-items:center;
@@ -29,18 +36,36 @@ padding:20px;
 border-radius:10px;
 }
 
+/* SEARCH */
+.search{
+text-align:center;
+margin:20px;
+}
+
+.search input{
+padding:10px;
+width:280px;
+border:none;
+border-radius:5px;
+}
+
+/* GRID */
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
 gap:15px;
 padding:20px;
 }
 
+/* CARD */
 .card{
 background:#111827;
-border-radius:10px;
+border-radius:12px;
 overflow:hidden;
+transition:0.3s;
 }
+
+.card:hover{transform:translateY(-6px);}
 
 .card img{
 width:100%;
@@ -48,15 +73,20 @@ height:170px;
 object-fit:cover;
 }
 
-.card-content{padding:12px;}
+.card-content{
+padding:12px;
+}
 
-.price{color:#00ffcc;}
+.price{
+color:#00ffcc;
+font-weight:bold;
+}
 
 button{
 width:100%;
 padding:10px;
-background:#00ffcc;
 border:none;
+background:#00ffcc;
 cursor:pointer;
 }
 </style>
@@ -65,79 +95,68 @@ cursor:pointer;
 <body>
 
 <nav>
-<h2>Smart EV Store ⚡</h2>
+<h2>EV Cars Store ⚡</h2>
 </nav>
 
 <div class="hero">
-<h1>AI Smart Product Images</h1>
+<h1>Electric Cars Marketplace</h1>
 </div>
 
-<h2 style="text-align:center;">Cars 🚗</h2>
-<div class="grid" id="cars"></div>
+<div class="search">
+<input type="text" id="search" placeholder="Search cars...">
+</div>
 
-<h2 style="text-align:center;">Parts 🔧</h2>
-<div class="grid" id="parts"></div>
+<h2 style="text-align:center;">🚗 Electric Cars</h2>
+<div class="grid" id="cars"></div>
 
 <script>
 
 /* =========================
    SMART IMAGE ENGINE
 ========================= */
-function getImage(name, type){
+function getImage(name){
 
-let key = name.toLowerCase();
+let n = name.toLowerCase();
 
-/* SMART CAR MATCHING */
-if(type === "car"){
-if(key.includes("tesla")) return "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg";
-if(key.includes("bmw")) return "https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg";
-if(key.includes("audi")) return "https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg";
-if(key.includes("mercedes")) return "https://images.pexels.com/photos/100650/pexels-photo-100650.jpeg";
-if(key.includes("hyundai")) return "https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg";
-if(key.includes("kia")) return "https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg";
+if(n.includes("tesla")) return "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg";
+if(n.includes("bmw")) return "https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg";
+if(n.includes("audi")) return "https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg";
+if(n.includes("mercedes")) return "https://images.pexels.com/photos/100650/pexels-photo-100650.jpeg";
+if(n.includes("hyundai")) return "https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg";
+if(n.includes("kia")) return "https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg";
+if(n.includes("ford")) return "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg";
+if(n.includes("volkswagen")) return "https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg";
+if(n.includes("porsche")) return "https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg";
+
 return "https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg";
 }
 
-/* SMART PART MATCHING */
-if(type === "part"){
-if(key.includes("battery")) return "https://images.pexels.com/photos/3806271/pexels-photo-3806271.jpeg";
-if(key.includes("charger")) return "https://images.pexels.com/photos/190574/pexels-photo-190574.jpeg";
-if(key.includes("wheel")) return "https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg";
-if(key.includes("camera")) return "https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg";
-if(key.includes("light")) return "https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg";
-return "https://images.pexels.com/photos/190574/pexels-photo-190574.jpeg";
-}
-}
-
 /* =========================
-   DATA (only names + price)
+   CARS DATA
 ========================= */
 
 let cars = [
-"Tesla Model 3","Tesla Model Y","BMW i4","Audi e-tron",
-"Mercedes EQS","Hyundai Ioniq 5","Kia EV6","Nissan Leaf",
-"Ford Mustang Mach-E","Volkswagen ID.4","Porsche Taycan"
-];
-
-let parts = [
-"EV Battery Pack","Fast Charger","Charging Cable","Car Wheel",
-"Brake Pads","Car Camera","LED Lights","Cooling System",
-"GPS System","Touch Screen","Motor Controller"
+"Tesla Model 3","Tesla Model Y","Tesla Model S","Tesla Model X",
+"BMW i4","BMW iX","Audi e-tron","Audi Q4 e-tron",
+"Mercedes EQS","Mercedes EQA","Hyundai Ioniq 5","Hyundai Ioniq 6",
+"Kia EV6","Nissan Leaf","Ford Mustang Mach-E",
+"Volkswagen ID.4","Porsche Taycan","Volvo XC40 Recharge",
+"Polestar 2","Chevrolet Bolt"
 ];
 
 /* =========================
-   CREATE CARD
+   CARD
 ========================= */
 
-function card(name,type){
-let img = getImage(name,type);
+function card(name){
+let img = getImage(name);
 
 return `
 <div class="card">
 <img src="${img}">
 <div class="card-content">
 <h3>${name}</h3>
-<p class="price">${Math.floor(Math.random()*50000)+500}$</p>
+<p class="price">${Math.floor(Math.random()*50000)+10000}$</p>
 <button onclick="buy('${name}')">Buy</button>
 </div>
 </div>`;
@@ -147,11 +166,23 @@ return `
    DISPLAY
 ========================= */
 
+function show(){
 document.getElementById("cars").innerHTML =
-cars.map(c=>card(c,"car")).join("");
+cars.map(card).join("");
+}
+show();
 
-document.getElementById("parts").innerHTML =
-parts.map(p=>card(p,"part")).join("");
+/* =========================
+   SEARCH
+========================= */
+
+document.getElementById("search").addEventListener("input",function(){
+let val=this.value.toLowerCase();
+
+document.getElementById("cars").innerHTML =
+cars.filter(c=>c.toLowerCase().includes(val))
+.map(card).join("");
+});
 
 /* BUY */
 function buy(name){
