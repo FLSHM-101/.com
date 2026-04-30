@@ -11,6 +11,7 @@ margin:0;
 font-family:Arial;
 background:#0b0f1a;
 color:white;
+scroll-behavior:smooth;
 }
 
 /* NAV */
@@ -19,32 +20,64 @@ display:flex;
 justify-content:space-between;
 padding:15px;
 background:#020617;
+position:sticky;
+top:0;
 }
 
 /* HERO */
 .hero{
-height:50vh;
+height:70vh;
 background:url("https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg") center/cover;
 display:flex;
 align-items:center;
 justify-content:center;
+text-align:center;
 }
 
-.hero h1{
-background:rgba(0,0,0,0.6);
-padding:20px;
+.hero-box{
+background:rgba(0,0,0,0.7);
+padding:30px;
+border-radius:12px;
+max-width:600px;
+}
+
+.hero-box h1{
+color:#00ffcc;
+font-size:32px;
+}
+
+/* SECTIONS */
+section{
+padding:40px 20px;
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+color:#00ffcc;
+}
+
+/* SERVICES */
+.services{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+}
+
+.service{
+background:#111827;
+padding:15px;
 border-radius:10px;
+text-align:center;
 }
 
-/* GRID */
+/* CARS */
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
 gap:15px;
-padding:20px;
 }
 
-/* CARD */
 .card{
 background:#111827;
 border-radius:12px;
@@ -66,44 +99,34 @@ color:#00ffcc;
 font-weight:bold;
 }
 
-.desc{
-font-size:13px;
-opacity:0.8;
-margin-top:5px;
-}
-
 button{
 width:100%;
 padding:10px;
-margin-top:10px;
-border:none;
 background:#00ffcc;
-cursor:pointer;
-}
-
-/* FORM */
-#formBox{
-position:fixed;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-background:#020617;
-padding:20px;
-border-radius:12px;
-display:none;
-width:300px;
-}
-
-#formBox input{
-width:100%;
-padding:10px;
-margin:5px 0;
 border:none;
-border-radius:5px;
+cursor:pointer;
+margin-top:10px;
 }
 
-#formBox button{
-margin-top:10px;
+/* REVIEWS */
+.reviews{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+}
+
+.review{
+background:#111827;
+padding:15px;
+border-radius:10px;
+}
+
+/* CONTACT */
+.contact{
+text-align:center;
+background:#020617;
+padding:30px;
+border-radius:10px;
 }
 </style>
 </head>
@@ -111,29 +134,58 @@ margin-top:10px;
 <body>
 
 <nav>
-<h2>EV Cars Store ⚡</h2>
+<h2>EV Store ⚡</h2>
 </nav>
 
+<!-- 1. HERO -->
 <div class="hero">
-<h1>Buy Your Electric Car</h1>
+<div class="hero-box">
+<h1>⚡ Electric Cars Marketplace</h1>
+<p>Buy, compare and discover the best electric cars with ease and confidence.</p>
+</div>
 </div>
 
-<h2 style="text-align:center;">🚗 Cars</h2>
+<!-- 2. SERVICES -->
+<section>
+<h2>Our Services 📌</h2>
+<div class="services">
+<div class="service">🚗 20+ Electric Cars</div>
+<div class="service">💰 Best Market Prices</div>
+<div class="service">⚡ Fast Search System</div>
+<div class="service">🧾 Easy Purchase Form</div>
+</div>
+</section>
+
+<!-- 3. CARS -->
+<section>
+<h2>Cars for Sale 🚗</h2>
 <div class="grid" id="cars"></div>
+</section>
 
-<!-- FORM -->
-<div id="formBox">
-<h3>Buy Car 🧾</h3>
-<input type="text" id="name" placeholder="Your Name">
-<input type="text" id="phone" placeholder="Phone">
-<input type="text" id="address" placeholder="Address">
-<button onclick="submitForm()">Confirm Order</button>
+<!-- 4. REVIEWS -->
+<section>
+<h2>Customer Reviews ⭐</h2>
+<div class="reviews">
+<div class="review">“Amazing website, very easy to use!” ⭐⭐⭐⭐⭐</div>
+<div class="review">“Great selection of electric cars.” ⭐⭐⭐⭐</div>
+<div class="review">“Clean design and fast loading.” ⭐⭐⭐⭐⭐</div>
 </div>
+</section>
+
+<!-- 5. CONTACT -->
+<section>
+<h2>Contact Us 📞</h2>
+<div class="contact">
+<p>Email: support@evstore.com</p>
+<p>Phone: +212 600 000 000</p>
+<p>Location: Morocco 🇲🇦</p>
+</div>
+</section>
 
 <script>
 
-/* ===== SMART IMAGE ===== */
-function getImage(name){
+/* SMART IMAGES */
+function img(name){
 let n=name.toLowerCase();
 
 if(n.includes("tesla")) return "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg";
@@ -142,83 +194,37 @@ if(n.includes("audi")) return "https://images.pexels.com/photos/1149831/pexels-p
 if(n.includes("mercedes")) return "https://images.pexels.com/photos/100650/pexels-photo-100650.jpeg";
 if(n.includes("hyundai")) return "https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg";
 if(n.includes("kia")) return "https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg";
+
 return "https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg";
 }
 
-/* ===== CARS ===== */
-let cars = [
-{
-name:"Tesla Model 3",
-price:"40000$",
-desc:"Fast electric sedan with long range and modern tech."
-},
-{
-name:"BMW i4",
-price:"55000$",
-desc:"Luxury electric car with sporty performance."
-},
-{
-name:"Audi e-tron",
-price:"70000$",
-desc:"Premium SUV with smooth electric driving experience."
-},
-{
-name:"Mercedes EQS",
-price:"110000$",
-desc:"Top luxury electric sedan with advanced AI features."
-},
-{
-name:"Hyundai Ioniq 5",
-price:"45000$",
-desc:"Modern design with fast charging technology."
-},
-{
-name:"Kia EV6",
-price:"47000$",
-desc:"Sporty electric crossover with strong performance."
-}
+/* CARS */
+let cars=[
+"Tesla Model 3","Tesla Model Y","BMW i4","Audi e-tron",
+"Mercedes EQS","Hyundai Ioniq 5","Kia EV6","Ford Mach-E",
+"Volkswagen ID.4","Porsche Taycan","Nissan Leaf","Polestar 2"
 ];
 
-let selectedCar="";
-
-/* ===== CARD ===== */
-function card(c){
+/* CARD */
+function card(name){
 return `
 <div class="card">
-<img src="${getImage(c.name)}">
+<img src="${img(name)}">
 <div class="card-content">
-<h3>${c.name}</h3>
-<p class="price">${c.price}</p>
-<p class="desc">${c.desc}</p>
-<button onclick="buy('${c.name}')">Buy</button>
+<h3>${name}</h3>
+<p class="price">${Math.floor(Math.random()*50000)+10000}$</p>
+<button onclick="buy('${name}')">Buy</button>
 </div>
-</div>
-`;
+</div>`;
 }
 
-/* ===== SHOW ===== */
+/* DISPLAY */
 document.getElementById("cars").innerHTML =
 cars.map(card).join("");
 
-/* ===== BUY ===== */
+/* BUY */
 function buy(name){
-selectedCar=name;
-document.getElementById("formBox").style.display="block";
-}
-
-/* ===== SUBMIT ===== */
-function submitForm(){
-let n=document.getElementById("name").value;
-let p=document.getElementById("phone").value;
-let a=document.getElementById("address").value;
-
-if(!n || !p || !a){
-alert("Fill all fields!");
-return;
-}
-
-alert("Order confirmed for " + selectedCar + " 🚗");
-document.getElementById("formBox").style.display="none";
+alert("You selected: " + name);
 }
 
 </script>
