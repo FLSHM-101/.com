@@ -26,62 +26,71 @@ top:0;
 
 /* HERO */
 .hero{
-height:70vh;
+height:80vh;
 background:url("https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg") center/cover;
 display:flex;
 align-items:center;
 justify-content:center;
 text-align:center;
+padding:20px;
 }
 
 .hero-box{
-background:rgba(0,0,0,0.7);
+background:rgba(0,0,0,0.75);
 padding:30px;
 border-radius:12px;
-max-width:600px;
+max-width:800px;
 }
 
 .hero-box h1{
 color:#00ffcc;
-font-size:32px;
+font-size:36px;
+margin-bottom:10px;
 }
 
-/* SECTIONS */
+.hero-box p{
+font-size:14px;
+line-height:1.7;
+opacity:0.9;
+}
+
+.hero-box button{
+margin-top:15px;
+padding:10px 20px;
+background:#00ffcc;
+border:none;
+cursor:pointer;
+font-weight:bold;
+}
+
+/* SECTION */
 section{
 padding:40px 20px;
 }
 
 h2{
 text-align:center;
-margin-bottom:20px;
 color:#00ffcc;
+margin-bottom:20px;
 }
 
-/* SERVICES */
-.services{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:15px;
-}
-
-.service{
-background:#111827;
-padding:15px;
-border-radius:10px;
-text-align:center;
-}
-
-/* CARS */
+/* GRID */
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
 gap:15px;
 }
 
+/* CARD */
 .card{
 background:#111827;
 border-radius:12px;
 overflow:hidden;
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-6px);
 }
 
 .card img{
@@ -108,25 +117,29 @@ cursor:pointer;
 margin-top:10px;
 }
 
-/* REVIEWS */
-.reviews{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:15px;
-}
-
-.review{
+/* COMMENTS */
+.comments{
+max-width:600px;
+margin:auto;
 background:#111827;
-padding:15px;
+padding:20px;
 border-radius:10px;
 }
 
-/* CONTACT */
-.contact{
-text-align:center;
-background:#020617;
-padding:30px;
-border-radius:10px;
+.comments input,
+.comments textarea{
+width:100%;
+padding:10px;
+margin:5px 0;
+border:none;
+border-radius:5px;
+}
+
+.comment{
+background:#0b0f1a;
+padding:10px;
+margin-top:10px;
+border-radius:8px;
 }
 </style>
 </head>
@@ -137,54 +150,52 @@ border-radius:10px;
 <h2>EV Store ⚡</h2>
 </nav>
 
-<!-- 1. HERO -->
+<!-- HERO -->
 <div class="hero">
 <div class="hero-box">
+
 <h1>⚡ Electric Cars Marketplace</h1>
-<p>Buy, compare and discover the best electric cars with ease and confidence.</p>
+
+<p>
+Welcome to EV Cars Store — a modern platform designed to help you explore, compare, and choose the best electric vehicles in one place.
+
+We provide detailed information about top electric car brands like Tesla, BMW, Audi, Mercedes, Hyundai, Kia and more.
+
+Our goal is to make your buying experience simple, fast, and clear so you can choose the perfect electric car based on your needs and budget.
+
+Start exploring and move toward a smarter and cleaner future of driving ⚡🚗
+</p>
+
+<button onclick="document.getElementById('cars').scrollIntoView({behavior:'smooth'})">
+Explore Cars 🚗
+</button>
+
 </div>
 </div>
 
-<!-- 2. SERVICES -->
-<section>
-<h2>Our Services 📌</h2>
-<div class="services">
-<div class="service">🚗 20+ Electric Cars</div>
-<div class="service">💰 Best Market Prices</div>
-<div class="service">⚡ Fast Search System</div>
-<div class="service">🧾 Easy Purchase Form</div>
-</div>
-</section>
-
-<!-- 3. CARS -->
+<!-- CARS -->
 <section>
 <h2>Cars for Sale 🚗</h2>
 <div class="grid" id="cars"></div>
 </section>
 
-<!-- 4. REVIEWS -->
+<!-- COMMENTS -->
 <section>
-<h2>Customer Reviews ⭐</h2>
-<div class="reviews">
-<div class="review">“Amazing website, very easy to use!” ⭐⭐⭐⭐⭐</div>
-<div class="review">“Great selection of electric cars.” ⭐⭐⭐⭐</div>
-<div class="review">“Clean design and fast loading.” ⭐⭐⭐⭐⭐</div>
-</div>
-</section>
+<h2>Customer Comments 💬</h2>
 
-<!-- 5. CONTACT -->
-<section>
-<h2>Contact Us 📞</h2>
-<div class="contact">
-<p>Email: support@evstore.com</p>
-<p>Phone: +212 600 000 000</p>
-<p>Location: Morocco 🇲🇦</p>
+<div class="comments">
+<input type="text" id="name" placeholder="Your name">
+<textarea id="text" placeholder="Write a comment..."></textarea>
+<button onclick="addComment()">Post Comment</button>
+
+<div id="list"></div>
 </div>
+
 </section>
 
 <script>
 
-/* SMART IMAGES */
+/* SMART IMAGE SYSTEM */
 function img(name){
 let n=name.toLowerCase();
 
@@ -194,6 +205,7 @@ if(n.includes("audi")) return "https://images.pexels.com/photos/1149831/pexels-p
 if(n.includes("mercedes")) return "https://images.pexels.com/photos/100650/pexels-photo-100650.jpeg";
 if(n.includes("hyundai")) return "https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg";
 if(n.includes("kia")) return "https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg";
+if(n.includes("ford")) return "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg";
 
 return "https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg";
 }
@@ -215,16 +227,36 @@ return `
 <p class="price">${Math.floor(Math.random()*50000)+10000}$</p>
 <button onclick="buy('${name}')">Buy</button>
 </div>
-</div>`;
+</div>
+`;
 }
 
-/* DISPLAY */
 document.getElementById("cars").innerHTML =
 cars.map(card).join("");
 
 /* BUY */
 function buy(name){
 alert("You selected: " + name);
+}
+
+/* COMMENTS */
+function addComment(){
+let n=document.getElementById("name").value;
+let t=document.getElementById("text").value;
+
+if(!n || !t){
+alert("Fill all fields");
+return;
+}
+
+let div=document.createElement("div");
+div.className="comment";
+div.innerHTML="<b>"+n+":</b> "+t;
+
+document.getElementById("list").appendChild(div);
+
+document.getElementById("name").value="";
+document.getElementById("text").value="";
 }
 
 </script>
