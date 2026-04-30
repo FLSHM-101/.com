@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart EV Cars Store</title>
+<title>EV Cars Store</title>
 
 <style>
 body{
@@ -17,13 +17,13 @@ color:white;
 nav{
 display:flex;
 justify-content:space-between;
-padding:15px 25px;
+padding:15px;
 background:#020617;
 }
 
 /* HERO */
 .hero{
-height:55vh;
+height:50vh;
 background:url("https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg") center/cover;
 display:flex;
 align-items:center;
@@ -36,23 +36,10 @@ padding:20px;
 border-radius:10px;
 }
 
-/* SEARCH */
-.search{
-text-align:center;
-margin:20px;
-}
-
-.search input{
-padding:10px;
-width:280px;
-border:none;
-border-radius:5px;
-}
-
 /* GRID */
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
 gap:15px;
 padding:20px;
 }
@@ -62,10 +49,7 @@ padding:20px;
 background:#111827;
 border-radius:12px;
 overflow:hidden;
-transition:0.3s;
 }
-
-.card:hover{transform:translateY(-6px);}
 
 .card img{
 width:100%;
@@ -82,12 +66,44 @@ color:#00ffcc;
 font-weight:bold;
 }
 
+.desc{
+font-size:13px;
+opacity:0.8;
+margin-top:5px;
+}
+
 button{
 width:100%;
 padding:10px;
+margin-top:10px;
 border:none;
 background:#00ffcc;
 cursor:pointer;
+}
+
+/* FORM */
+#formBox{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:#020617;
+padding:20px;
+border-radius:12px;
+display:none;
+width:300px;
+}
+
+#formBox input{
+width:100%;
+padding:10px;
+margin:5px 0;
+border:none;
+border-radius:5px;
+}
+
+#formBox button{
+margin-top:10px;
 }
 </style>
 </head>
@@ -99,24 +115,26 @@ cursor:pointer;
 </nav>
 
 <div class="hero">
-<h1>Electric Cars Marketplace</h1>
+<h1>Buy Your Electric Car</h1>
 </div>
 
-<div class="search">
-<input type="text" id="search" placeholder="Search cars...">
-</div>
-
-<h2 style="text-align:center;">🚗 Electric Cars</h2>
+<h2 style="text-align:center;">🚗 Cars</h2>
 <div class="grid" id="cars"></div>
+
+<!-- FORM -->
+<div id="formBox">
+<h3>Buy Car 🧾</h3>
+<input type="text" id="name" placeholder="Your Name">
+<input type="text" id="phone" placeholder="Phone">
+<input type="text" id="address" placeholder="Address">
+<button onclick="submitForm()">Confirm Order</button>
+</div>
 
 <script>
 
-/* =========================
-   SMART IMAGE ENGINE
-========================= */
+/* ===== SMART IMAGE ===== */
 function getImage(name){
-
-let n = name.toLowerCase();
+let n=name.toLowerCase();
 
 if(n.includes("tesla")) return "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg";
 if(n.includes("bmw")) return "https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg";
@@ -124,69 +142,83 @@ if(n.includes("audi")) return "https://images.pexels.com/photos/1149831/pexels-p
 if(n.includes("mercedes")) return "https://images.pexels.com/photos/100650/pexels-photo-100650.jpeg";
 if(n.includes("hyundai")) return "https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg";
 if(n.includes("kia")) return "https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg";
-if(n.includes("ford")) return "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg";
-if(n.includes("volkswagen")) return "https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg";
-if(n.includes("porsche")) return "https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg";
-
 return "https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg";
 }
 
-/* =========================
-   CARS DATA
-========================= */
-
+/* ===== CARS ===== */
 let cars = [
-"Tesla Model 3","Tesla Model Y","Tesla Model S","Tesla Model X",
-"BMW i4","BMW iX","Audi e-tron","Audi Q4 e-tron",
-"Mercedes EQS","Mercedes EQA","Hyundai Ioniq 5","Hyundai Ioniq 6",
-"Kia EV6","Nissan Leaf","Ford Mustang Mach-E",
-"Volkswagen ID.4","Porsche Taycan","Volvo XC40 Recharge",
-"Polestar 2","Chevrolet Bolt"
+{
+name:"Tesla Model 3",
+price:"40000$",
+desc:"Fast electric sedan with long range and modern tech."
+},
+{
+name:"BMW i4",
+price:"55000$",
+desc:"Luxury electric car with sporty performance."
+},
+{
+name:"Audi e-tron",
+price:"70000$",
+desc:"Premium SUV with smooth electric driving experience."
+},
+{
+name:"Mercedes EQS",
+price:"110000$",
+desc:"Top luxury electric sedan with advanced AI features."
+},
+{
+name:"Hyundai Ioniq 5",
+price:"45000$",
+desc:"Modern design with fast charging technology."
+},
+{
+name:"Kia EV6",
+price:"47000$",
+desc:"Sporty electric crossover with strong performance."
+}
 ];
 
-/* =========================
-   CARD
-========================= */
+let selectedCar="";
 
-function card(name){
-let img = getImage(name);
-
+/* ===== CARD ===== */
+function card(c){
 return `
 <div class="card">
-<img src="${img}">
+<img src="${getImage(c.name)}">
 <div class="card-content">
-<h3>${name}</h3>
-<p class="price">${Math.floor(Math.random()*50000)+10000}$</p>
-<button onclick="buy('${name}')">Buy</button>
+<h3>${c.name}</h3>
+<p class="price">${c.price}</p>
+<p class="desc">${c.desc}</p>
+<button onclick="buy('${c.name}')">Buy</button>
 </div>
-</div>`;
+</div>
+`;
 }
 
-/* =========================
-   DISPLAY
-========================= */
-
-function show(){
+/* ===== SHOW ===== */
 document.getElementById("cars").innerHTML =
 cars.map(card).join("");
-}
-show();
 
-/* =========================
-   SEARCH
-========================= */
-
-document.getElementById("search").addEventListener("input",function(){
-let val=this.value.toLowerCase();
-
-document.getElementById("cars").innerHTML =
-cars.filter(c=>c.toLowerCase().includes(val))
-.map(card).join("");
-});
-
-/* BUY */
+/* ===== BUY ===== */
 function buy(name){
-alert("Added to cart: " + name);
+selectedCar=name;
+document.getElementById("formBox").style.display="block";
+}
+
+/* ===== SUBMIT ===== */
+function submitForm(){
+let n=document.getElementById("name").value;
+let p=document.getElementById("phone").value;
+let a=document.getElementById("address").value;
+
+if(!n || !p || !a){
+alert("Fill all fields!");
+return;
+}
+
+alert("Order confirmed for " + selectedCar + " 🚗");
+document.getElementById("formBox").style.display="none";
 }
 
 </script>
